@@ -37,9 +37,9 @@ class HT16K33():
             for n, x in enumerate(xList):
                 print("xList", xList, x)
                 print("xMapper", self.xMapper)
-                xList[n] = self.xMapper[x]
+                xList[n] = self.xMapper[x.lower()]
             for n, y in enumerate(yList):
-                yList[n] = self.yMapper[y.lower()]
+                yList[n] = self.yMapper[y]
 
         for x, y in zip(xList, yList):
             if clear:
@@ -55,9 +55,9 @@ class HT16K33():
             If chessMapper is True then the input uses chess notation"""
         if chessMapperOn:
             for n, x in enumerate(xList):
-                xList[n] = self.xMapper[x]
+                xList[n] = self.xMapper[x.lower()]
             for n, y in enumerate(yList):
-                yList[n] = self.yMapper[y.lower()]
+                yList[n] = self.yMapper[y]
 
         for x, y in zip(xList, yList):
             if clear:
