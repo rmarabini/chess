@@ -27,7 +27,7 @@ class HT16K33():
                 self.display.clear()
             # anodes numbers starts 1
             # cathodes number start 0
-            self.display.set_pixel(x+1, y)
+            self.display.set_pixel(x+1, y, 1)
             self.write_display()
 
     def testMatrix(self, size=8, printOn=True):
