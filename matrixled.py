@@ -20,7 +20,7 @@ class HT16K33():
         # Initialize the display. Must be called once before using the display.
         self.display.begin()
 
-    def setPixels(self, xList, yList, clear = True):
+    def setPixelsOn(self, xList, yList, clear = True):
         """ x and y are arrays. light all the pixels in the array"""
         for x, y in zip(xList, yList):
             if clear:
@@ -30,13 +30,42 @@ class HT16K33():
             self.display.set_pixel(x+1, y, 1)
             self.display.write_display()
 
+    def setPixelsOff(self, xList, yList, clear = True):
+        """ x and y are arrays. light all the pixels in the array"""
+        for x, y in zip(xList, yList):
+            if clear:
+                self.display.clear()
+            # anodes numbers starts 1
+            # cathodes number start 0
+            self.display.set_pixel(x+1, y, 0)
+            self.display.write_display()
+
     def testMatrix(self, size=8, printOn=True, seconds=1):
         """test function. LEDS light one by one in the order 1 to size*size"""
         while True:
             for led in range(size*size):
                 x = led // 3
                 y = led % 3   # cathodes number start 0
-                self.setPixels([x], [y], clear = True)
+                self.setPixelsOn([x], [y], clear = True)
+                if printOn:
+                    print("led %d %d ON" % (x, y))
+                time.sleep(seconds)
+
+    def testMatrix2(self, size=8, printOn=True, seconds=1):
+        """test function. switch on all leds one after the other.
+        Then switch then off"""
+        while True:
+            for led in range(size*size):
+                x = led // 3
+                y = led % 3   # cathodes number start 0
+                self.setPixelsOn([x], [y], clear = False)
+                if printOn:
+                    print("led %d %d ON" % (x, y))
+                time.sleep(seconds)
+            for led in range(size*size):
+                x = led // 3
+                y = led % 3   # cathodes number start 0
+                self.setPixelsOff([x], [y], clear = False)
                 if printOn:
                     print("led %d %d ON" % (x, y))
                 time.sleep(seconds)
