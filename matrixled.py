@@ -30,12 +30,13 @@ class HT16K33():
             self.display.set_pixel(x+1, y, 1)
             self.display.write_display()
 
-    def testMatrix(self, size=8, printOn=True):
+    def testMatrix(self, size=8, printOn=True, seconds=1):
         """test function. LEDS light one by one in the order 1 to size*size"""
-
-        for led in range(size*size):   # anodes numbers starts 1
-            x = led // 3 + 1    # anodes numbers starts 1
-            y = led % 3   # cathodes number start 0
-            self.setPixels([x], [y], clear = True)
-            if printOn:
-                print("led %d %d ON" % (x, y))
+        while True:
+            for led in range(size*size):   # anodes numbers starts 1
+                x = led // 3 + 1    # anodes numbers starts 1
+                y = led % 3   # cathodes number start 0
+                self.setPixels([x], [y], clear = True)
+                if printOn:
+                    print("led %d %d ON" % (x, y))
+                time.sleep(seconds)
