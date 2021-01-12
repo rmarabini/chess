@@ -99,8 +99,8 @@ class HT16K33():
 
     def testMatrix3(self, size=8, printOn=True, seconds=1):
         """test function. LEDS light one by one in the order 1 to size*size"""
-        xx=[1,2,3,4,5,6,7,8]
-        yy=['a','b','c','d','e','f','g','h']
+        yy=[1,2,3,4,5,6,7,8]
+        xx=['a','b','c','d','e','f','g','h']
         while True:
             for led in range(size*size):
                 x = xx[led // 3]
