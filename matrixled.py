@@ -33,8 +33,8 @@ class HT16K33():
     def testMatrix(self, size=8, printOn=True, seconds=1):
         """test function. LEDS light one by one in the order 1 to size*size"""
         while True:
-            for led in range(size*size):   # anodes numbers starts 1
-                x = led // 3 + 1    # anodes numbers starts 1
+            for led in range(size*size):
+                x = led // 3
                 y = led % 3   # cathodes number start 0
                 self.setPixels([x], [y], clear = True)
                 if printOn:
