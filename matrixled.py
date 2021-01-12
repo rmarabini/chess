@@ -107,5 +107,5 @@ class HT16K33():
                 y = yy[led % 3]
                 self.setPixelsOn([x], [y], clear = True, chessMapperOn=True)
                 if printOn:
-                    print("led %d %s ON" % (x, y))
+                    print("led %s %d ON" % (x, y))
                 time.sleep(seconds)
