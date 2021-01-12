@@ -34,8 +34,9 @@ class HT16K33():
         """ x and y are arrays. light all the pixels in the array.
         If chessMapper is True then the input uses chess notation"""
         if chessMapperOn:
-            print("xList", xList, x)
             for n, x in enumerate(xList):
+                print("xList", xList, x)
+                print("xMapper", self.xMapper)
                 xList[n] = self.xMapper[x]
             for n, y in enumerate(yList):
                 yList[n] = self.yMapper[y.lower()]
