@@ -105,14 +105,12 @@ class HT16K33():
                 y = yy[led % 3]
                 self.setPixelsOn([x], [y], clear = False, chessMapperOn=True)
                 if printOn:
-                    print("led %s %d ON" % (self.xMapper[x],
-                                            self.yMapper[y]))
+                    print("led %d %d ON" % (x, y))
                 time.sleep(seconds)
             for led in range(size*size):
                 x = xx[led // 3]
                 y = yy[led % 3]
                 self.setPixelsOff([x], [y], clear = False, chessMapperOn=True)
                 if printOn:
-                    print("led %s %d OFF" % (self.xMapper[x],
-                                            self.yMapper[y]))
+                    print("led %d %d OFF" % (x, y))
                 time.sleep(seconds)
