@@ -28,7 +28,7 @@ class HT16K33():
             # anodes numbers starts 1
             # cathodes number start 0
             self.display.set_pixel(x+1, y, 1)
-            self.write_display()
+            self.dispplay.write_display()
 
     def testMatrix(self, size=8, printOn=True):
         """test function. LEDS light one by one in the order 1 to size*size"""
