@@ -32,7 +32,7 @@ class GPIOreed():
         self.size = size
         self.matrix = np.zeros((size, size),dtype=int)
 
-    def getGPIOMatrix(self):
+    def getGPIOMatrix(self, matrixLedObject=None):
         """fill 2D array self.matrix with the state of the reed
         switches. GPIO is used to access to then"""
 
@@ -50,6 +50,9 @@ class GPIOreed():
                     self.matrix[row][col] = 0  # open
             # put output to low and try with next one
             GPIO.output(self.anoMapper[row], GPIO.LOW)
+
+        if matrixLedObject is not None:
+            matrixLedObject.setPixelsMatrixOn(self.matrix)
 
     def getMatrixChange(self):
         """returns the tuple, (true/false, array of coordinates)
