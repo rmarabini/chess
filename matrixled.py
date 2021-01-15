@@ -89,7 +89,8 @@ class HT16K33():
                 y = led % 3   # cathodes number start 0
                 self.setPixelsOn([x], [y], clear = True)
                 if printOn:
-                    print("led %d %d ON" % (x, y))
+                    #print("led %d %d ON" % (x, y))
+                    self.matrix.print()
                 time.sleep(seconds)
 
     def testMatrix2(self, size=8, printOn=True, seconds=1):
@@ -101,14 +102,16 @@ class HT16K33():
                 y = led % 3
                 self.setPixelsOn([x], [y], clear = False)
                 if printOn:
-                    print("led %d %d ON" % (x, y))
+                    #print("led %d %d ON" % (x, y))
+                    self.matrix.print()
                 time.sleep(seconds)
             for led in range(size*size):
                 x = led // 3
                 y = led % 3
                 self.setPixelsOff([x], [y], clear = False)
                 if printOn:
-                    print("led %d %d OFF" % (x, y))
+                    #print("led %d %d OFF" % (x, y))
+                    self.matrix.print()
                 time.sleep(seconds)
 
     def testMatrix3(self, size=8, printOn=True, seconds=1):
@@ -124,6 +127,7 @@ class HT16K33():
                     print("led %s %d ON (%d, %d)" % (x, y,
                                                self.xMapper[x],
                                                self.yMapper[y]))
+                    self.matrix.print()
                 time.sleep(seconds)
             for led in range(size*size):
                 x = xx[led // 3]
@@ -134,4 +138,5 @@ class HT16K33():
                                              self.xMapper[x],
                                              self.yMapper[y]
                                              ))
+                    self.matrix.print()
                 time.sleep(seconds)
