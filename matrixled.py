@@ -99,18 +99,17 @@ class HT16K33():
 
     # TODO: move these tests outside the class
     # implement as proper unitary tests.
-    def testMatrix(self, size=8, printOn=True, seconds=1):
+    def testMatrix(self, printOn=True, seconds=1):
         """test function. LEDS light one by one in the order 1 to size*size"""
         while True:
-            for led in range(size*size):
-                x = led // 3
-                y = led % 3   # cathodes number start 0
-                self.setPixelsOn([x], [y], clear = True)
-                if printOn:
-                    print("led %s %d ON" %
-                          (self.xMapperT[x], self.yMapperT[y]))
-                    self.print()
-                time.sleep(seconds)
+            for x in list(self.xMapper.items())[:self.size]:
+                for y in list(self.yMapper.items())[:self.size]:
+                    self.setPixelsOn([x], [y], chessMapperOn=True, clear = True)
+                    if printOn:
+                        print("led %s %d ON" %
+                          (x, y))
+                        self.print()
+                    time.sleep(seconds)
 
     def testMatrix2(self, size=8, printOn=True, seconds=1):
         """test function. switch on all leds one after the other.
