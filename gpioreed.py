@@ -1,7 +1,8 @@
 import RPi.GPIO as GPIO
 import numpy as np
 
-from constants import xMapper, yMapper
+from constants import xMapper, yMapper, yMapperT
+
 
 class GPIOreed():
     """access reed switch using GPIO.
