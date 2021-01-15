@@ -9,7 +9,8 @@
 import time
 from Adafruit_LED_Backpack import Matrix8x8
 import numpy as np
-from constants import xMapper, yMapper
+from constants import xMapper, yMapper, yMapperT
+
 
 class HT16K33():
     """Class that controls an Adafruit HT16K33 16×8 LED Matrix Driver."""
@@ -71,7 +72,7 @@ class HT16K33():
         # (0,0 in matrix should be bottom left
         # in board
         for y in range(self.size -1, -1, -1):
-            print(" %d [" % yMapper[y], end="")
+            print(" %d [" % yMapperT[y], end="")
             for x in range(self.size):
                 print("%d " % self.matrix[x][y], end="")
             print("]")
