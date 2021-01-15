@@ -46,6 +46,17 @@ class HT16K33():
             self.matrix[x][y]=1
             self.display.write_display()
 
+    def setPixelsMatrixOn(self, matrix):
+        """ set all coords equal to 1 in matrix on.
+        switch off others"""
+        self.display.clear()
+        self.matrix.fill(0)
+        for x in range(0, self.size):
+            for y in range(0, self.size):
+                self.display.set_pixel(x+1, y, 1)
+                self.matrix[x][y]=1
+                self.display.write_display()
+
     def setPixelsOff(self, xList, yList, clear = True,
                      chessMapperOn=False):
         """ x and y are arrays. light all the pixels in the array
