@@ -83,9 +83,9 @@ class HT16K33():
             for y in range(self.size):
                 print("%d " % self.matrix[x][y], end="")
             print("]")
-        print(" ", end="")
+        print("   ", end="")
         for item in list(self.xMapper.keys())[:self.size]:
-            print("   %s" % item, end="")
+            print(" %s" % item, end="")
         print("")
 
     # TODO: move these tests outside the class
