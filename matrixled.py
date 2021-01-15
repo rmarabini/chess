@@ -80,9 +80,9 @@ class HT16K33():
                 ' '.join(str(row))
                 for counter, row in
                 enumerate(self.matrix)), sep='\n')
-
+        print("  ", end="")
         for item in list(self.xMapper.keys())[:self.size]:
-            print("%3s" % item, end="")
+            print("  %s" % item, end="")
         print("")
 
     # TODO: move these tests outside the class
