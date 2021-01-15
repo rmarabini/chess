@@ -77,7 +77,7 @@ class HT16K33():
     def print(self):
         """Print self.matrix as a 2D array"""
         print(*(str(self.size - counter) + ' '.join(str(row)) for counter, row in enumerate(self.matrix)), sep='\n')
-        print(self.xMapper.keys()[:self.size])
+        print(self.xMapper.keys())
 
     # TODO: move these tests outside the class
     # implement as proper unitary tests.
