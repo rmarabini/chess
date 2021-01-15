@@ -79,9 +79,9 @@ class HT16K33():
         # (0,0 in matrix should be bottom left
         # in board
         for x in range(self.size -1, -1, -1):
-            print(" %d [", end="")
+            print(" %d [" % x, end="")
             for y in range(self.size):
-                print(self.matrix[x][y], end="")
+                print("%d " % self.matrix[x][y], end="")
             print("]")
         print(" ", end="")
         for item in list(self.xMapper.keys())[:self.size]:
