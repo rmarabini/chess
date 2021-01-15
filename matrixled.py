@@ -80,7 +80,7 @@ class HT16K33():
                 ' '.join(str(row))
                 for counter, row in
                 enumerate(self.matrix)), sep='\n')
-        print("  ", end="")
+        print(" ", end="")
         for item in list(self.xMapper.keys())[:self.size]:
             print("   %s" % item, end="")
         print("")
