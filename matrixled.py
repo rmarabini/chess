@@ -76,8 +76,14 @@ class HT16K33():
 
     def print(self):
         """Print self.matrix as a 2D array"""
-        print(*(str(self.size - counter) + ' '.join(str(row)) for counter, row in enumerate(self.matrix)), sep='\n')
-        print(list(self.xMapper.keys())[:self.size])
+        print(*("%d " % (self.size - counter) +
+                ' '.join(str(row))
+                for counter, row in
+                enumerate(self.matrix)), sep='\n')
+
+        for item in list(self.xMapper.keys())[:self.size]:
+            print(item, sep=' ')
+        print("")
 
     # TODO: move these tests outside the class
     # implement as proper unitary tests.
@@ -89,7 +95,7 @@ class HT16K33():
                 y = led % 3   # cathodes number start 0
                 self.setPixelsOn([x], [y], clear = True)
                 if printOn:
-                    #print("led %d %d ON" % (x, y))
+                    print("led %d %d ON" % (x, y))
                     self.print()
                 time.sleep(seconds)
 
@@ -102,7 +108,7 @@ class HT16K33():
                 y = led % 3
                 self.setPixelsOn([x], [y], clear = False)
                 if printOn:
-                    #print("led %d %d ON" % (x, y))
+                    print("led %d %d ON" % (x, y))
                     self.print()
                 time.sleep(seconds)
             for led in range(size*size):
