@@ -8,9 +8,11 @@
 
 import time
 from Adafruit_LED_Backpack import Matrix8x8
-"""Class that controls an Adafruit HT16K33 16×8 LED Matrix Driver."""
+import numpy as np
+
 
 class HT16K33():
+    """Class that controls an Adafruit HT16K33 16×8 LED Matrix Driver."""
     xMapper={}
     yMapper = {}
     for k, v in zip ([1, 2, 3, 4, 5, 6, 7, 8],
@@ -20,11 +22,13 @@ class HT16K33():
                      [0, 1, 2, 3, 4, 5, 6, 7]):
         xMapper[k]=v
 
-    def __init__(self, address=0x70, busnum=1):
+    def __init__(self, address=0x70, busnum=1, size=8):
         """Create display instance on default I2C address (0x70) and bus number.
            check using I2cdetect -y 1  to make sure the address is 70,
            if not pass the right address and busnum """
 
+        self.size = size
+        self.matrix = np.zeros((size, size),dtype=int)
         self.display = Matrix8x8.Matrix8x8(address=address, busnum=busnum)
         # Initialize the display. Must be called once before using the display.
         self.display.begin()
@@ -42,9 +46,11 @@ class HT16K33():
         for x, y in zip(xList, yList):
             if clear:
                 self.display.clear()
+                self.matrix.fill(0)
             # anodes numbers starts 1
             # cathodes number start 0
             self.display.set_pixel(x+1, y, 1)
+            self.matrix[x][y]=1
             self.display.write_display()
 
     def setPixelsOff(self, xList, yList, clear = True,
@@ -60,11 +66,21 @@ class HT16K33():
         for x, y in zip(xList, yList):
             if clear:
                 self.display.clear()
+                self.matrix.fill(0)
+                return
             # anodes numbers starts 1
             # cathodes number start 0
             self.display.set_pixel(x+1, y, 0)
             self.display.write_display()
+            self.matrix[x][y]=0
 
+    def print(self):
+        """Print self.matrix as a 2D array"""
+        print(*(' '.join(row) for counter, row in enumerate(self.matrix)), sep='\n')
+        print(self.xMapper[:self.size])
+
+    # TODO: move these tests outside the class
+    # implement as proper unitary tests.
     def testMatrix(self, size=8, printOn=True, seconds=1):
         """test function. LEDS light one by one in the order 1 to size*size"""
         while True:
