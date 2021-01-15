@@ -53,9 +53,10 @@ class HT16K33():
         self.matrix.fill(0)
         for x in range(0, self.size):
             for y in range(0, self.size):
-                self.display.set_pixel(x+1, y, 1)
-                self.matrix[x][y]=1
-                self.display.write_display()
+                if matrix[x][y] == 1:
+                    self.display.set_pixel(x+1, y, 1)
+                    self.matrix[x][y]=1
+                    self.display.write_display()
 
     def setPixelsOff(self, xList, yList, clear = True,
                      chessMapperOn=False):
