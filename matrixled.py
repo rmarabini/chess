@@ -76,10 +76,13 @@ class HT16K33():
 
     def print(self):
         """Print self.matrix as a 2D array"""
-        print(*("%d " % (self.size - counter) +
-                ' '.join(str(row))
-                for counter, row in
-                enumerate(self.matrix)), sep='\n')
+        # (0,0 in matrix should be bottom left
+        # in board
+        for x in range(self.size -1, -1, -1):
+            print(" %d [", end="")
+            for y in range(self.size):
+                print(self.matrix[x][y], end="")
+            print("]")
         print(" ", end="")
         for item in list(self.xMapper.keys())[:self.size]:
             print("   %s" % item, end="")
