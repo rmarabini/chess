@@ -12,16 +12,18 @@ class GPIOreed():
     anoMapper = {}  # map actual GPIO numbers to rows  // L
 
     for k, v in zip ([1, 2, 3, 4, 5, 6, 7, 8],
-                     [23, 24, 25, 12, 16, 20, 21, 26]):
+                     [23, 4, 25, 12, 16, 20, 21, 26]):
         anoMapper[k]=v
 
     for k, v in zip (['a','b', 'c','d','e','f','g','h'],
-                     [ 4, 17, 27, 22,  5,  6, 13, 19]):
+                     [ 24, 17, 27, 22,  5,  6, 13, 19]):
         catMapper[k]=v
 
-    def __init__(self, catodes, anodes, size=8):
+    def __init__(self, size=8):
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)  # PINs refer to the X in GPIOX label
+        catodes = list(self.anoMapper.values())[:size]
+        anodes  = list(self.anodes.values())[:size]
         for cat, ano in zip(catodes, anodes):
             GPIO.setup(ano, GPIO.OUT)
             # in gpio need a pull down/up resistor
