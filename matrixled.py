@@ -115,22 +115,22 @@ class HT16K33():
         """test function. switch on all leds one after the other.
         Then switch then off"""
         while True:
-            for led in range(size*size):
-                x = led // 3
-                y = led % 3
-                self.setPixelsOn([x], [y], clear = False)
-                if printOn:
-                    print("led %d %d ON" % (x, y))
-                    self.print()
-                time.sleep(seconds)
-            for led in range(size*size):
-                x = led // 3
-                y = led % 3
-                self.setPixelsOff([x], [y], clear = False)
-                if printOn:
-                    #print("led %d %d OFF" % (x, y))
-                    self.print()
-                time.sleep(seconds)
+            for x in list(self.xMapper.keys())[:self.size]:
+                for y in list(self.yMapper.keys())[:self.size]:
+                    self.setPixelsOn([x], [y], chessMapperOn=True, clear = False)
+                    if printOn:
+                        print("led %s %d ON" %
+                          (x, y))
+                        self.print()
+                    time.sleep(seconds)
+            for x in list(self.xMapper.keys())[:self.size]:
+                for y in list(self.yMapper.keys())[:self.size]:
+                    self.setPixelsOff([x], [y], chessMapperOn=True, clear = False)
+                    if printOn:
+                        print("led %s %d OFF" %
+                          (x, y))
+                        self.print()
+                    time.sleep(seconds)
 
     def testMatrix3(self, size=8, printOn=True, seconds=1):
         """test function. LEDS light one by one in the order 1 to size*size"""
