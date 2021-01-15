@@ -81,7 +81,7 @@ class HT16K33():
         for x in range(self.size -1, -1, -1):
             print(" %d [" % x, end="")
             for y in range(self.size):
-                print("%d " % self.matrix[x][y], end="")
+                print("%d " % self.matrix[y][x], end="")
             print("]")
         print("   ", end="")
         for item in list(self.xMapper.keys())[:self.size]:
