@@ -107,7 +107,7 @@ class HT16K33():
                 y = led % 3   # cathodes number start 0
                 self.setPixelsOn([x], [y], clear = True)
                 if printOn:
-                    print("led %d %d ON" %
+                    print("led %s %d ON" %
                           (self.xMapperT[x], self.xMapperT[y]))
                     self.print()
                 time.sleep(seconds)
