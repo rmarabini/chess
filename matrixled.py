@@ -102,8 +102,8 @@ class HT16K33():
     def testMatrix(self, printOn=True, seconds=1):
         """test function. LEDS light one by one in the order 1 to size*size"""
         while True:
-            for x in list(self.xMapper.values())[:self.size]:
-                for y in list(self.yMapper.values())[:self.size]:
+            for x in list(self.xMapper.keys())[:self.size]:
+                for y in list(self.yMapper.keys())[:self.size]:
                     self.setPixelsOn([x], [y], chessMapperOn=True, clear = True)
                     if printOn:
                         print("led %s %d ON" %
