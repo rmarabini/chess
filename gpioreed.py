@@ -11,11 +11,11 @@ class GPIOreed():
     catMapper = {}  # map actual GPIO numbers to columns // C
     anoMapper = {}  # map actual GPIO numbers to rows  // L
 
-    for k, v in zip ([1, 2, 3, 4, 5, 6, 7, 8],
+    for k, v in zip ([0, 1, 2, 3, 4, 5, 6, 7],
                      [23, 4, 25, 12, 16, 20, 21, 26]):
         anoMapper[k]=v
 
-    for k, v in zip (['a','b', 'c','d','e','f','g','h'],
+    for k, v in zip ([0, 1, 2, 3, 4, 5, 6, 7],
                      [ 24, 17, 27, 22,  5,  6, 13, 19]):
         catMapper[k]=v
 
