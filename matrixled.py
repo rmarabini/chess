@@ -9,27 +9,10 @@
 import time
 from Adafruit_LED_Backpack import Matrix8x8
 import numpy as np
-
+from constants import xMapper, yMapper
 
 class HT16K33():
     """Class that controls an Adafruit HT16K33 16×8 LED Matrix Driver."""
-    xMapper={}
-    yMapper = {}
-    xMapperT={}
-    yMapperT = {}
-    for k, v in zip ([1, 2, 3, 4, 5, 6, 7, 8],
-                     [0, 1, 2, 3, 4, 5, 6, 7]):
-        yMapper[k]=v
-    for k, v in zip (['a','b', 'c','d','e','f','g','h'],
-                     [0, 1, 2, 3, 4, 5, 6, 7]):
-        xMapper[k]=v
-    for k, v in zip ([0, 1, 2, 3, 4, 5, 6, 7],
-                     [1, 2, 3, 4, 5, 6, 7, 8]
-                     ):
-        yMapperT[k]=v
-    for k, v in zip ([0, 1, 2, 3, 4, 5, 6, 7],
-                     ['a','b', 'c','d','e','f','g','h']):
-        xMapperT[k]=v
 
     def __init__(self, address=0x70, busnum=1, size=8):
         """Create display instance on default I2C address (0x70) and bus number.
@@ -48,9 +31,9 @@ class HT16K33():
         If chessMapper is True then the input uses chess notation"""
         if chessMapperOn:
             for n, x in enumerate(xList):
-                xList[n] = self.xMapper[x.lower()]
+                xList[n] = xMapper[x.lower()]
             for n, y in enumerate(yList):
-                yList[n] = self.yMapper[y]
+                yList[n] = yMapper[y]
 
         for x, y in zip(xList, yList):
             if clear:
@@ -68,9 +51,9 @@ class HT16K33():
             If chessMapper is True then the input uses chess notation"""
         if chessMapperOn:
             for n, x in enumerate(xList):
-                xList[n] = self.xMapper[x.lower()]
+                xList[n] = xMapper[x.lower()]
             for n, y in enumerate(yList):
-                yList[n] = self.yMapper[y]
+                yList[n] = yMapper[y]
 
         for x, y in zip(xList, yList):
             if clear:
@@ -87,13 +70,13 @@ class HT16K33():
         """Print self.matrix as a 2D array"""
         # (0,0 in matrix should be bottom left
         # in board
-        for x in range(self.size -1, -1, -1):
-            print(" %d [" % (x+1), end="")
-            for y in range(self.size):
-                print("%d " % self.matrix[y][x], end="")
+        for y in range(self.size -1, -1, -1):
+            print(" %d [" % yMapper[y], end="")
+            for x in range(self.size):
+                print("%d " % self.matrix[x][y], end="")
             print("]")
         print("   ", end="")
-        for item in list(self.xMapper.keys())[:self.size]:
+        for item in list(xMapper.keys())[:self.size]:
             print(" %s" % item, end="")
         print("")
 
@@ -102,8 +85,8 @@ class HT16K33():
     def testMatrix(self, printOn=True, seconds=1):
         """test function. LEDS light one by one in the order 1 to size*size"""
         while True:
-            for x in list(self.xMapper.keys())[:self.size]:
-                for y in list(self.yMapper.keys())[:self.size]:
+            for x in list(xMapper.keys())[:self.size]:
+                for y in list(yMapper.keys())[:self.size]:
                     self.setPixelsOn([x], [y], chessMapperOn=True, clear = True)
                     if printOn:
                         print("led %s %d ON" %
@@ -115,16 +98,16 @@ class HT16K33():
         """test function. switch on all leds one after the other.
         Then switch then off"""
         while True:
-            for x in list(self.xMapper.keys())[:self.size]:
-                for y in list(self.yMapper.keys())[:self.size]:
+            for x in list(xMapper.keys())[:self.size]:
+                for y in list(yMapper.keys())[:self.size]:
                     self.setPixelsOn([x], [y], chessMapperOn=True, clear = False)
                     if printOn:
                         print("led %s %d ON" %
                           (x, y))
                         self.print()
                     time.sleep(seconds)
-            for x in list(self.xMapper.keys())[:self.size]:
-                for y in list(self.yMapper.keys())[:self.size]:
+            for x in list(xMapper.keys())[:self.size]:
+                for y in list(yMapper.keys())[:self.size]:
                     self.setPixelsOff([x], [y], chessMapperOn=True, clear = False)
                     if printOn:
                         print("led %s %d OFF" %
