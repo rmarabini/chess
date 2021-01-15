@@ -22,8 +22,8 @@ class GPIOreed():
     def __init__(self, size=8):
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)  # PINs refer to the X in GPIOX label
-        catodes = list(self.anoMapper.values())[:size]
-        anodes  = list(self.anodes.values())[:size]
+        catodes = list(self.catMapper.values())[:size]
+        anodes  = list(self.anoMapper.values())[:size]
         for cat, ano in zip(catodes, anodes):
             GPIO.setup(ano, GPIO.OUT)
             # in gpio need a pull down/up resistor
