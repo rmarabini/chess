@@ -56,7 +56,7 @@ class HT16K33():
                 if matrix[x][y] == 1:
                     self.display.set_pixel(x+1, y, 1)
                     self.matrix[x][y]=1
-                    self.display.write_display()
+        self.display.write_display()
 
     def setPixelsOff(self, xList, yList, clear = True,
                      chessMapperOn=False):
@@ -76,8 +76,8 @@ class HT16K33():
             # anodes numbers starts 1
             # cathodes number start 0
             self.display.set_pixel(x+1, y, 0)
-            self.display.write_display()
             self.matrix[x][y]=0
+        self.display.write_display()
 
     def print(self):
         """Print self.matrix as a 2D array"""

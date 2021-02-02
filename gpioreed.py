@@ -6,8 +6,9 @@ from constants import xMapper, yMapper, yMapperT
 
 class GPIOreed():
     """access reed switch using GPIO.
-    CLI pinout returns raspberry pinout
-    CLI gpio readall returns the state of all ports"""
+    some interesting CLIs
+     pinout returns raspberry pinout
+     gpio readall returns the state of all ports"""
     catMapper = {}  # map actual GPIO numbers to columns // C
     anoMapper = {}  # map actual GPIO numbers to rows  // L
 
