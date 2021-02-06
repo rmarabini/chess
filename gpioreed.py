@@ -35,6 +35,9 @@ class CPIOreed():
         for i in range(self.size):
             self.GPIOA[i].direction = Direction.OUTPUT
             self.GPIOB[i].direction = Direction.OUTPUT
+            self.GPIOA[i].value = False
+            self.GPIOB[j].value = False
+            
         for i in range(self.size):
             for j in range(self.size):
                 print("i, j", i, j)
