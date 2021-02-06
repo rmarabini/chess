@@ -39,6 +39,17 @@ class CPIOreed():
             self.GPIOA[i].value = True
             self.GPIOB[i].value = False
 
+    def checkMatrix(self):
+        for i in range(self.size):
+            self.checkLine(i)
+
+    def checkLine(self, lineNo):
+        self.GPIOB[lineNo] = False
+        for i in range(self.size):
+            if self.GPIOA[i].value == False:
+                print ("Pressed =", lineNo, i)
+        self.GPIOB[lineNo] = True
+
     def reset2(self):
         """ test, connect the led (not the reeds)
             to the MCP23017"""
@@ -75,22 +86,10 @@ class CPIOreed():
     def testUsingReeds(self):
         """ Connect MCP23017 to reed switches
              (A-> negative, B->positive"""
-        self.reset()
-        oldI = 0
-        oldJ = 0
+        self.reset2()
         while True:
-          for i in range(self.size):
-            for j in range(self.size):
-                print("i, j", i, j)
-                # reset matrix
-                self.GPIOA[oldI].value = True
-                self.GPIOB[oldJ].value = False
-                # set led on
-                self.GPIOA[i].value = False
-                self.GPIOB[j].value = True
-                oldI=i
-                oldJ=j
-                time.sleep(0.5)
+            self.checkMatrix()
+            time.sleep(1)
 
 
 class GPIOreedX():
