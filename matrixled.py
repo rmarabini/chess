@@ -13,7 +13,7 @@ from constants import xMapper, yMapper, yMapperT
 
 
 class HT16K33():
-    """Class that controls an Adafruit HT16K33 16×8 LED Matrix Driver."""
+    """Class that controls an Adafruit HT16K33 16x8 LED Matrix Driver."""
 
     def __init__(self, address=0x70, busnum=1, size=8):
         """Create display instance on default I2C address (0x70) and bus number.
