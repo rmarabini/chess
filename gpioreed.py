@@ -1,10 +1,47 @@
 import RPi.GPIO as GPIO
 import numpy as np
+import board
+import busio
+from digitalio import Direction, Pull
+from adafruit_mcp230xx.mcp23017 import MCP23017
 
 from constants import xMapper, yMapper, yMapperT
+class CPIOreed():
+    """access reed switch using GPIO.
+    some interesting CLIs
+     pinout returns raspberry pinout
+     gpio readall returns the state of all ports"""
+    def __init__(self, size=8, adress=0x21):
+        i2c = busio.I2C(board.SCL, board.SDA)
+        mcp = MCP23017(i2c, address=adress)
+        self.GPIOA=[]
+        self.GPIOB=[]
+        for i in range(size):
+            pin = mcp.get_pin(i)
+            self.GPIOA.append(pin)
+            #set as output
+            #pin.direction = Direction.OUTPUT
+            pin = mcp.get_pin(i+8)
+            # set as input and pull resistence to DOWN
+            self.GPIOB.append(mcp.get_pin(i+8))
+            #pin.direction = Direction.INPUT
+            #pin.pull = Pull.UP
 
+    def test(self):
+        """ test, connect the led (not the reeds)
+            to the MCP23017"""
+        # for the test all pins should be output
+        for i in range(self.size):
+            self.GPIOA[i].direction = Direction.OUTPUT
+            self.GPIOB[i].direction = Direction.OUTPUT
+        for i in range(self.size):
+            for j in range(self.size):
+                print("i, j", i, j)
+                self.GPIOA[i].value = True
+                self.GPIOB[j].value = False
+                input("Press Enter to continue...")
 
-class GPIOreed():
+class GPIOreedX():
     """access reed switch using GPIO.
     some interesting CLIs
      pinout returns raspberry pinout
