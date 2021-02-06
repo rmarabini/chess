@@ -1,4 +1,4 @@
-"""Class that controls an Adafruit HT16K33 16×8 LED Matrix Driver
+"""Class that controls an Adafruit HT16K33 16x8 LED Matrix Driver
  requires Adafruit_Python_LED_Backpack (see https://github.com/adafruit/Adafruit_Python_LED_Backpack)
   The command
      i2cdetect -y
