@@ -11,9 +11,10 @@ class CPIOreed():
     some interesting CLIs
      pinout returns raspberry pinout
      gpio readall returns the state of all ports"""
-    def __init__(self, size=8, adress=0x21):
+    def __init__(self, size=8, address=0x21):
+        self.size = size
         i2c = busio.I2C(board.SCL, board.SDA)
-        mcp = MCP23017(i2c, address=adress)
+        mcp = MCP23017(i2c, address=address)
         self.GPIOA=[]
         self.GPIOB=[]
         for i in range(size):
