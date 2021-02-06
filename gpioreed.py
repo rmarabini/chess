@@ -44,11 +44,11 @@ class CPIOreed():
             self.checkLine(i)
 
     def checkLine(self, lineNo):
-        self.GPIOB[lineNo] = False
+        self.GPIOB[lineNo].value = False
         for i in range(self.size):
             if self.GPIOA[i].value == False:
                 print ("Pressed =", lineNo, i)
-        self.GPIOB[lineNo] = True
+        self.GPIOB[lineNo].value = True
 
     def reset2(self):
         """ test, connect the led (not the reeds)
