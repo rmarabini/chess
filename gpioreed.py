@@ -35,16 +35,27 @@ class CPIOreed():
         for i in range(self.size):
             self.GPIOA[i].direction = Direction.OUTPUT
             self.GPIOB[i].direction = Direction.OUTPUT
-            self.GPIOA[i].value = False
+            self.GPIOA[i].value = True
             self.GPIOB[i].value = False
+        # self.matrix = np.zeros((self.size, self.size),dtype=int)
+
 
     def test(self):
         self.reset()
+        oldI = 0
+        oldJ = 0
+
         for i in range(self.size):
             for j in range(self.size):
                 print("i, j", i, j)
+                # reset matrix
+                self.GPIOA[oldI].value = True
+                self.GPIOB[oldJ].value = False
+                # set led on
                 self.GPIOA[i].value = False
                 self.GPIOB[j].value = True
+                oldI=i
+                oldJ=j
                 input("Press Enter to continue...")
 
 class GPIOreedX():
