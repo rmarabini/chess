@@ -93,37 +93,38 @@ class HT16K33():
             print(" %s" % item, end="")
         print("")
 
-    # TODO: move these tests outside the class
-    # implement as proper unitary tests.
-    def testMatrix(self, printOn=True, seconds=1):
-        """test function. LEDS light one by one in the order 1 to size*size"""
-        while True:
-            for x in list(xMapper.keys())[:self.size]:
-                for y in list(yMapper.keys())[:self.size]:
-                    self.setPixelsOn([x], [y], chessMapperOn=True, clear = True)
-                    if printOn:
-                        print("led %s %d ON" %
-                          (x, y))
-                        self.printM()
-                    time.sleep(seconds)
+    def getSize(self):
+        return self.size
 
-    def testMatrix2(self, printOn=True, seconds=1):
-        """test function. switch on all leds one after the other.
-        Then switch then off"""
-        while True:
-            for x in list(xMapper.keys())[:self.size]:
-                for y in list(yMapper.keys())[:self.size]:
-                    self.setPixelsOn([x], [y], chessMapperOn=True, clear = False)
-                    if printOn:
-                        print("led %s %d ON" %
-                          (x, y))
-                        self.printM()
-                    time.sleep(seconds)
-            for x in list(xMapper.keys())[:self.size]:
-                for y in list(yMapper.keys())[:self.size]:
-                    self.setPixelsOff([x], [y], chessMapperOn=True, clear = False)
-                    if printOn:
-                        print("led %s %d OFF" %
-                          (x, y))
-                        self.printM()
-                    time.sleep(seconds)
+def testMatrix(ledMatrix, printOn=True, seconds=1):
+    """test function. LEDS light one by one in the order 1 to size*size"""
+    while True:
+        for x in list(xMapper.keys())[:ledMatrix.getSize()]:
+            for y in list(yMapper.keys())[:ledMatrix.getSize()]:
+                ledMatrix.setPixelsOn([x], [y], chessMapperOn=True, clear = True)
+                if printOn:
+                    print("led %s %d ON" %
+                      (x, y))
+                    ledMatrix.printM()
+                time.sleep(seconds)
+
+def testMatrix2(ledMatrix, printOn=True, seconds=1):
+    """test function. switch on all leds one after the other.
+    Then switch then off"""
+    while True:
+        for x in list(xMapper.keys())[:ledMatrix.getSize()]:
+            for y in list(yMapper.keys())[:ledMatrix.getSize()]:
+                ledMatrix.setPixelsOn([x], [y], chessMapperOn=True, clear = False)
+                if printOn:
+                    print("led %s %d ON" %
+                      (x, y))
+                    ledMatrix.printM()
+                time.sleep(seconds)
+        for x in list(xMapper.keys())[:ledMatrix.getSize()]:
+            for y in list(yMapper.keys())[:ledMatrix.getSize()]:
+                ledMatrix.setPixelsOff([x], [y], chessMapperOn=True, clear = False)
+                if printOn:
+                    print("led %s %d OFF" %
+                      (x, y))
+                    ledMatrix.printM()
+                time.sleep(seconds)
