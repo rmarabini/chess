@@ -4,6 +4,7 @@ import board
 import busio
 from digitalio import Direction, Pull
 from adafruit_mcp230xx.mcp23017 import MCP23017
+import time
 
 from constants import xMapper, yMapper, yMapperT
 class CPIOreed():
@@ -40,7 +41,7 @@ class CPIOreed():
         # self.matrix = np.zeros((self.size, self.size),dtype=int)
 
 
-    def test(self):
+    def testUsingLeds(self):
         self.reset()
         oldI = 0
         oldJ = 0
@@ -56,7 +57,7 @@ class CPIOreed():
                 self.GPIOB[j].value = True
                 oldI=i
                 oldJ=j
-                input("Press Enter to continue...")
+                time.sleep(0.5)
 
 class GPIOreedX():
     """access reed switch using GPIO.
