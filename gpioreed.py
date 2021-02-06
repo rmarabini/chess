@@ -47,6 +47,7 @@ class CPIOreed():
             self.GPIOA[i].direction = Direction.OUTPUT
             self.GPIOA[i].pull = Pull.UP
             self.GPIOB[i].direction = Direction.INPUT
+            self.GPIOB[i].pull = Pull.UP
             self.GPIOA[i].value = False
             self.GPIOB[i].value = False
 
