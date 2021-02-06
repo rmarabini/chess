@@ -47,7 +47,8 @@ class CPIOreed():
         self.GPIOB[lineNo].value = False
         for i in range(self.size):
             if self.GPIOA[i].value == False:
-                print ("Pressed =", lineNo, i)
+                print ("Pressed =", lineNo, i, end='')
+            print()
         self.GPIOB[lineNo].value = True
 
     def reset2(self):
