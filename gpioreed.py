@@ -28,7 +28,7 @@ class CPIOreed():
             #pin.direction = Direction.INPUT
             #pin.pull = Pull.UP
 
-    def test(self):
+    def reset(self):
         """ test, connect the led (not the reeds)
             to the MCP23017"""
         # for the test all pins should be output
@@ -38,6 +38,8 @@ class CPIOreed():
             self.GPIOA[i].value = False
             self.GPIOB[i].value = False
 
+    def test(self):
+        self.reset()
         for i in range(self.size):
             for j in range(self.size):
                 print("i, j", i, j)
