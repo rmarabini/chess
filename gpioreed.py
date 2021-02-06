@@ -38,11 +38,23 @@ class CPIOreed():
             self.GPIOB[i].direction = Direction.OUTPUT
             self.GPIOA[i].value = True
             self.GPIOB[i].value = False
+
+    def reset2(self):
+        """ test, connect the led (not the reeds)
+            to the MCP23017"""
+        # for the test all pins should be output
+        for i in range(self.size):
+            self.GPIOA[i].direction = Direction.INPUT
+            self.GPIOA[i].pull = Pull.UP
+            self.GPIOB[i].direction = Direction.OUTPUT
+            self.GPIOA[i].value = False
+            self.GPIOB[i].value = False
+
         # self.matrix = np.zeros((self.size, self.size),dtype=int)
 
 
     def testUsingLeds(self):
-        """ Connect MCP23017 ro led (A-> negative, B->positive"""
+        """ Connect MCP23017 to led (A-> negative, B->positive"""
         self.reset()
         oldI = 0
         oldJ = 0
@@ -59,6 +71,27 @@ class CPIOreed():
                 oldI=i
                 oldJ=j
                 time.sleep(0.5)
+
+    def testUsingReeds(self):
+        """ Connect MCP23017 to reed switches
+             (A-> negative, B->positive"""
+        self.reset()
+        oldI = 0
+        oldJ = 0
+        while True:
+          for i in range(self.size):
+            for j in range(self.size):
+                print("i, j", i, j)
+                # reset matrix
+                self.GPIOA[oldI].value = True
+                self.GPIOB[oldJ].value = False
+                # set led on
+                self.GPIOA[i].value = False
+                self.GPIOB[j].value = True
+                oldI=i
+                oldJ=j
+                time.sleep(0.5)
+
 
 class GPIOreedX():
     """access reed switch using GPIO.
