@@ -38,8 +38,8 @@ class CPIOreed():
         for i in range(self.size):
             for j in range(self.size):
                 print("i, j", i, j)
-                self.GPIOA[i].value = True
-                self.GPIOB[j].value = False
+                self.GPIOA[i].value = False
+                self.GPIOB[j].value = True
                 input("Press Enter to continue...")
 
 class GPIOreedX():
