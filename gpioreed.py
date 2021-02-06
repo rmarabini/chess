@@ -45,7 +45,6 @@ class CPIOreed():
         # for the test all pins should be output
         for i in range(self.size):
             self.GPIOA[i].direction = Direction.OUTPUT
-            self.GPIOA[i].pull = Pull.UP
             self.GPIOB[i].direction = Direction.INPUT
             self.GPIOB[i].pull = Pull.UP
             self.GPIOA[i].value = True
