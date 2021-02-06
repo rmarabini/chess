@@ -44,9 +44,9 @@ class CPIOreed():
             to the MCP23017"""
         # for the test all pins should be output
         for i in range(self.size):
-            self.GPIOA[i].direction = Direction.INPUT
+            self.GPIOA[i].direction = Direction.OUTPUT
             self.GPIOA[i].pull = Pull.UP
-            self.GPIOB[i].direction = Direction.OUTPUT
+            self.GPIOB[i].direction = Direction.INPUT
             self.GPIOA[i].value = False
             self.GPIOB[i].value = False
 
