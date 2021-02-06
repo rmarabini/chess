@@ -42,13 +42,15 @@ class CPIOreed():
     def checkMatrix(self):
         for i in range(self.size):
             self.checkLine(i)
-
+        print()
+        
     def checkLine(self, lineNo):
         self.GPIOB[lineNo].value = False
+        print("Pressed =", end='')
         for i in range(self.size):
             if self.GPIOA[i].value == False:
-                print ("Pressed =", lineNo, i, end='')
-            print()
+                print (lineNo, i, end='  ')
+
         self.GPIOB[lineNo].value = True
 
     def reset2(self):
