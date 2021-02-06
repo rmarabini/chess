@@ -42,11 +42,12 @@ class CPIOreed():
 
 
     def testUsingLeds(self):
+        """ Connect MCP23017 ro led (A-> negative, B->positive"""
         self.reset()
         oldI = 0
         oldJ = 0
-
-        for i in range(self.size):
+        while True:
+          for i in range(self.size):
             for j in range(self.size):
                 print("i, j", i, j)
                 # reset matrix
