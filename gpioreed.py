@@ -40,13 +40,13 @@ class CPIOreed():
             self.GPIOB[i].value = False
 
     def checkMatrix(self):
+        print("Pressed =", end='')
         for i in range(self.size):
             self.checkLine(i)
         print()
-        
+
     def checkLine(self, lineNo):
         self.GPIOB[lineNo].value = False
-        print("Pressed =", end='')
         for i in range(self.size):
             if self.GPIOA[i].value == False:
                 print (lineNo, i, end='  ')
