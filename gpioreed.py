@@ -77,7 +77,7 @@ class GPIOreed():
                 pairs.append(col, row)
             return True, pairs
 
-    def print(self):
+    def printM(self):
         """Print self.matrix as a 2D array"""
         # (0,0 in matrix should be bottom left
         # in board

@@ -79,7 +79,7 @@ class HT16K33():
             self.matrix[x][y]=0
         self.display.write_display()
 
-    def print(self):
+    def printM(self):
         """Print self.matrix as a 2D array"""
         # (0,0 in matrix should be bottom left
         # in board
@@ -104,7 +104,7 @@ class HT16K33():
                     if printOn:
                         print("led %s %d ON" %
                           (x, y))
-                        self.print()
+                        self.printM()
                     time.sleep(seconds)
 
     def testMatrix2(self, printOn=True, seconds=1):
@@ -117,7 +117,7 @@ class HT16K33():
                     if printOn:
                         print("led %s %d ON" %
                           (x, y))
-                        self.print()
+                        self.printM()
                     time.sleep(seconds)
             for x in list(xMapper.keys())[:self.size]:
                 for y in list(yMapper.keys())[:self.size]:
@@ -125,5 +125,5 @@ class HT16K33():
                     if printOn:
                         print("led %s %d OFF" %
                           (x, y))
-                        self.print()
+                        self.printM()
                     time.sleep(seconds)
