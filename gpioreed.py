@@ -16,23 +16,19 @@ class CPIOreed():
         self.size = size
         i2c = busio.I2C(board.SCL, board.SDA)
         mcp = MCP23017(i2c, address=address)
+        self.matrix = np.zeros((size, size),dtype=int)
         self.GPIOA=[]
         self.GPIOB=[]
         for i in range(size):
-            pin = mcp.get_pin(i)
-            self.GPIOA.append(pin)
-            #set as output
-            #pin.direction = Direction.OUTPUT
-            pin = mcp.get_pin(i+8)
-            # set as input and pull resistence to DOWN
+            self.GPIOA.append(mcp.get_pin(i))
             self.GPIOB.append(mcp.get_pin(i+8))
-            #pin.direction = Direction.INPUT
-            #pin.pull = Pull.UP
+        self.reset2()
 
     def reset(self):
         """ test, connect the led (not the reeds)
             to the MCP23017"""
-        # for the test all pins should be output
+        # for this test all pins should be output
+        self.matrix[:]=0
         for i in range(self.size):
             self.GPIOA[i].direction = Direction.OUTPUT
             self.GPIOB[i].direction = Direction.OUTPUT
@@ -41,22 +37,28 @@ class CPIOreed():
 
     def checkMatrix(self):
         print("Pressed =", end='')
-        for i in range(self.size):
-            self.checkLine(i)
+        for row in range(self.size):
+            self.checkLine(row)
         print()
 
-    def checkLine(self, lineNo):
-        self.GPIOB[lineNo].value = False
-        for i in range(self.size):
-            if self.GPIOA[i].value == False:
-                print (lineNo, i, end='  ')
+    def checkLine(self, row):
+        self.GPIOB[row].value = False
+        for col in range(self.size):
+            if self.GPIOA[col].value == False:
+                self.matrix[col][row] = 1
+            else:
+                self.matrix[col][row] = 0
 
-        self.GPIOB[lineNo].value = True
+        self.GPIOB[row].value = True
 
     def reset2(self):
-        """ test, connect the led (not the reeds)
-            to the MCP23017"""
+        """ MCP23017 initial state. All pins
+            set to true. Since input is unestable
+            when not connected to a source we need to
+            use the pull.up resistors. Note the this IC
+            does not have pul.down resistors"""
         # for the test all pins should be output
+        self.matrix[:]=0
         for i in range(self.size):
             self.GPIOB[i].direction = Direction.OUTPUT
             self.GPIOA[i].direction = Direction.INPUT
@@ -68,22 +70,25 @@ class CPIOreed():
 
 
     def testUsingLeds(self):
-        """ Connect MCP23017 to led (A-> negative, B->positive"""
+        """ Connect MCP23017 to led (A-> negative, B->positive)
+        Discontinued"""
         self.reset()
         oldI = 0
         oldJ = 0
         while True:
-          for i in range(self.size):
-            for j in range(self.size):
-                print("i, j", i, j)
+          for i in range(self.size):  # col
+            for j in range(self.size):  # row
                 # reset matrix
                 self.GPIOA[oldI].value = True
                 self.GPIOB[oldJ].value = False
+                self.matrix[i:j] = 0
                 # set led on
                 self.GPIOA[i].value = False
                 self.GPIOB[j].value = True
+                self.matrix[i][j] = 1
                 oldI=i
                 oldJ=j
+                self.printM()
                 time.sleep(0.5)
 
     def testUsingReeds(self):
@@ -92,81 +97,8 @@ class CPIOreed():
         self.reset2()
         while True:
             self.checkMatrix()
+            self.printM()
             time.sleep(1)
-
-
-class GPIOreedX():
-    """access reed switch using GPIO.
-    some interesting CLIs
-     pinout returns raspberry pinout
-     gpio readall returns the state of all ports"""
-    catMapper = {}  # map actual GPIO numbers to columns // C
-    anoMapper = {}  # map actual GPIO numbers to rows  // L
-
-    for k, v in zip ([0, 1, 2, 3, 4, 5, 6, 7],
-                     [23, 4, 25, 12, 16, 20, 21, 26]):
-        anoMapper[k]=v
-
-    for k, v in zip ([0, 1, 2, 3, 4, 5, 6, 7],
-                     [ 24, 17, 27, 22,  5,  6, 13, 19]):
-        catMapper[k]=v
-
-    def __init__(self, size=8):
-        GPIO.setwarnings(False)
-        GPIO.setmode(GPIO.BCM)  # PINs refer to the X in GPIOX label
-        catodes = list(self.catMapper.values())[:size]
-        anodes  = list(self.anoMapper.values())[:size]
-        for cat, ano in zip(catodes, anodes):
-            GPIO.setup(ano, GPIO.OUT)
-            # in gpio need a pull down/up resistor
-            # otherwise measurement will jump from high to low radomly
-            GPIO.setup(cat, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-        self.size = size
-        self.matrix = np.zeros((size, size),dtype=int)
-
-    def getGPIOMatrix(self, matrixLedObject=None):
-        """fill 2D array self.matrix with the state of the reed
-        switches. GPIO is used to access to then"""
-
-        # for all rows...
-        for row in range(self.size):
-            # ...put output as high
-            # and measure input
-            # if switch is open measurement will be 0
-            # otherwise measurement will be 1
-            GPIO.output(self.anoMapper[row], GPIO.HIGH)  # cat
-            for col in range(self.size):
-                if GPIO.input(self.catMapper[col]):
-                    self.matrix[row][col] = 1  # close
-                else:
-                    self.matrix[row][col] = 0  # open
-            # put output to low and try with next one
-            GPIO.output(self.anoMapper[row], GPIO.LOW)
-
-        if matrixLedObject is not None:
-            matrixLedObject.setPixelsMatrixOn(self.matrix)
-
-    def getMatrixChange(self):
-        """returns the tuple, (true/false, array of coordinates)
-        The first element is false if there is no changes and
-        true otherwise.
-        Follows an array with positions that have change
-        as (x,y) coordinates. If there is no change
-        an empty array is returned"""
-        oldMatrix = np.copy(self.matrix)
-        self.getGPIOMatrix()
-        equal_arrays = np.array_equal(oldMatrix, self.matrix)
-
-        if equal_arrays:
-            return False, []
-        else:
-            differences = np.where(oldMatrix != self.matrix)
-            cols = differences[0]
-            rows = differences[1]
-            pairs = []
-            for col, row in zip(cols, rows):
-                pairs.append(col, row)
-            return True, pairs
 
     def printM(self):
         """Print self.matrix as a 2D array"""
@@ -182,5 +114,25 @@ class GPIOreedX():
             print(" %s" % item, end="")
         print("")
 
+    def getMatrixChange(self):
+        """returns the tuple, (true/false, array of coordinates)
+        The first element is false if there is no changes and
+        true otherwise.
+        Follows an array with positions that have change
+        as (x,y) coordinates. If there is no change
+        an empty array is returned"""
+        oldMatrix = np.copy(self.matrix)
+        self.checkMatrix()
+        equal_arrays = np.array_equal(oldMatrix, self.matrix)
 
+        if equal_arrays:
+            return False, []
+        else:
+            differences = np.where(oldMatrix != self.matrix)
+            cols = differences[0]
+            rows = differences[1]
+            pairs = []
+            for col, row in zip(cols, rows):
+                pairs.append(col, row)
+            return True, pairs
 
