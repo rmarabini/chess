@@ -107,7 +107,7 @@ class CPIOreed():
         for y in range(self.size -1, -1, -1):
             print(" %d [" % yMapperT[y], end="")
             for x in range(self.size):
-                print("%d " % self.matrix[x][y], end="")
+                print("%d " % self.matrix[y][x], end="")
             print("]")
         print("   ", end="")
         for item in list(xMapper.keys())[:self.size]:
