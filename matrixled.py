@@ -60,7 +60,7 @@ class HT16K33():
         for x in range(0, self.size):
             for y in range(0, self.size):
                 if matrix[x][y] == 1:
-                    self.display.set_pixel(x+1, y, 1)
+                    self.display.set_pixel(x, y, 1)
                     self.matrix[x][y]=1
         self.display.write_display()
 
