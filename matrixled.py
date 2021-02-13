@@ -7,7 +7,9 @@
  """
 
 import time
-from Adafruit_LED_Backpack import Matrix8x8
+
+#from Adafruit_LED_Backpack import Matrix8x8
+from Adafruit_LED_Backpack import Matrix8x16
 import numpy as np
 from constants import xMapper, yMapper, yMapperT
 
@@ -22,7 +24,8 @@ class HT16K33():
 
         self.size = size
         self.matrix = np.zeros((size, size),dtype=int)
-        self.display = Matrix8x8.Matrix8x8(address=address, busnum=busnum)
+        #self.display = Matrix8x8.Matrix8x8(address=address, busnum=busnum)
+        self.display = Matrix8x16.Matrix8x16(address=address, busnum=busnum)
         # Initialize the display. Must be called once before using the display.
         self.display.begin()
 
@@ -42,10 +45,7 @@ class HT16K33():
                 self.matrix.fill(0)
             # anodes numbers starts 1
             # cathodes number start 0
-            if y == 7: # anode A/ is not working
-                self.display.set_pixel(x+1, y+1, 1)
-            else:
-                self.display.set_pixel(x+1, y, 1)
+            self.display.set_pixel(x+1, y, 1)
             self.matrix[x][y]=1
             self.display.write_display()
 
