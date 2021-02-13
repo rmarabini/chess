@@ -46,7 +46,7 @@ class HT16K33():
             # anodes numbers starts 1
             # cathodes number start 0
             if y==7:
-                self.display.set_pixel(x+1, y+1, 1)
+                self.display.set_pixel(x+2, y, 1)
             else:
                 self.display.set_pixel(x+1, y, 1)
             self.matrix[x][y]=1
