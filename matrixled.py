@@ -11,7 +11,7 @@ import time
 #from Adafruit_LED_Backpack import Matrix8x8
 from Adafruit_LED_Backpack import Matrix8x16
 import numpy as np
-from constants import xMapper, yMapper, yMapperT
+from constants import xMapper, xMapperT, yMapper, yMapperT
 
 
 class HT16K33():
@@ -39,13 +39,14 @@ class HT16K33():
             for n, y in enumerate(yList):
                 yList[n] = yMapper[y]
 
+        if clear:
+            self.display.clear()
+            self.matrix.fill(0)
+
         for x, y in zip(xList, yList):
-            if clear:
-                self.display.clear()
-                self.matrix.fill(0)
             # anodes numbers starts 1
             # cathodes number start 0
-            self.display.set_pixel(x, y, 1)
+            self.display.set_pixel(y, x, 1)
             self.matrix[x][y]=1
             self.display.write_display()
 
@@ -57,7 +58,7 @@ class HT16K33():
         for x in range(0, self.size):
             for y in range(0, self.size):
                 if matrix[x][y] == 1:
-                    self.display.set_pixel(x, y, 1)
+                    self.display.set_pixel(y, z, 1)
                     self.matrix[x][y]=1
         self.display.write_display()
 
@@ -71,14 +72,14 @@ class HT16K33():
             for n, y in enumerate(yList):
                 yList[n] = yMapper[y]
 
+        if clear:
+             self.display.clear()
+             self.matrix.fill(0)
+
         for x, y in zip(xList, yList):
-            if clear:
-                self.display.clear()
-                self.matrix.fill(0)
-                return
             # anodes numbers starts 1
             # cathodes number start 0
-            self.display.set_pixel(x, y, 0)
+            self.display.set_pixel(y, x, 0)
             self.matrix[x][y]=0
         self.display.write_display()
 
@@ -89,7 +90,7 @@ class HT16K33():
         for y in range(self.size -1, -1, -1):
             print(" %d [" % yMapperT[y], end="")
             for x in range(self.size):
-                print("%d " % self.matrix[y][x], end="")
+                print("%d " % self.matrix[x][y], end="")
             print("]")
         print("   ", end="")
         for item in list(xMapper.keys())[:self.size]:
@@ -102,8 +103,8 @@ class HT16K33():
 def testMatrix(ledMatrix, printOn=True, seconds=1):
     """test function. LEDS light one by one in the order 1 to size*size"""
     while True:
-        for x in list(xMapper.keys())[:ledMatrix.getSize()]:
-            for y in list(yMapper.keys())[:ledMatrix.getSize()]:
+        for y in list(yMapper.keys())[:ledMatrix.getSize()]:
+            for x in list(xMapper.keys())[:ledMatrix.getSize()]:
                 ledMatrix.setPixelsOn([x], [y], chessMapperOn=True, clear = True)
                 if printOn:
                     print("led %s %d ON" %
@@ -113,18 +114,18 @@ def testMatrix(ledMatrix, printOn=True, seconds=1):
 
 def testMatrix2(ledMatrix, printOn=True, seconds=1):
     """test function. switch on all leds one after the other.
-    Then switch then off"""
+    Then switch then off one by one"""
     while True:
-        for x in list(xMapper.keys())[:ledMatrix.getSize()]:
-            for y in list(yMapper.keys())[:ledMatrix.getSize()]:
+        for y in list(yMapper.keys())[:ledMatrix.getSize()]:
+            for x in list(xMapper.keys())[:ledMatrix.getSize()]:
                 ledMatrix.setPixelsOn([x], [y], chessMapperOn=True, clear = False)
                 if printOn:
                     print("led %s %d ON" %
                       (x, y))
                     ledMatrix.printM()
                 time.sleep(seconds)
-        for x in list(xMapper.keys())[:ledMatrix.getSize()]:
-            for y in list(yMapper.keys())[:ledMatrix.getSize()]:
+        for y in list(yMapper.keys())[:ledMatrix.getSize()]:
+            for x in list(xMapper.keys())[:ledMatrix.getSize()]:
                 ledMatrix.setPixelsOff([x], [y], chessMapperOn=True, clear = False)
                 if printOn:
                     print("led %s %d OFF" %
@@ -133,6 +134,7 @@ def testMatrix2(ledMatrix, printOn=True, seconds=1):
                 time.sleep(seconds)
 
 def testMatrix3(ledMatrix, printOn=True):
+    """ switch on all led at the same time"""
     matrix = np.ones((8, 8),dtype=int)
     ledMatrix.setPixelsMatrixOn(matrix)
     if printOn:
