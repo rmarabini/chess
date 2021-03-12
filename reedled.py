@@ -1,4 +1,4 @@
-from matrixled import HT16K33, testMatrix, testMatrix2
+from matrixled import HT16K33
 from gpioreed import CPIOreed
 import chess
 import chess.engine
@@ -93,3 +93,36 @@ is_castling -> Checks if the given pseudo-legal move is a castling move.
             msg = "draw: claim"
         print(msg)
         self.engine.quit()
+
+
+##########################
+def testLedReedCloseMatrix(seconds=0.1):
+    """switch on led where there is a close reed switch"""
+    ledMatrix = HT16K33(size=8)
+    cpio = CPIOreed(address=0x21, size=8)
+    cpio.reset2()
+    while True:
+        cpio.checkMatrix()
+        ledMatrix.setPixelsMatrixOn(cpio.matrix)
+        time.sleep(seconds)
+
+def testLedReedCloseSwitch(seconds=1):
+    """switch on led when siation changes"""
+    ledMatrix = HT16K33(size=8)
+    cpio = CPIOreed(address=0x21, size=8)
+    cpio.reset2()
+    while True:
+        change, pairList = cpio.getMatrixChange()
+        print(change, pairList)
+        ledMatrix.display.clear()
+        ledMatrix.matrix.fill(0)
+        ledMatrix.display.write_display()
+        if change:
+            for pair in pairList:
+                if pair[2]:
+                    print("ON")
+                    ledMatrix.setPixelsOn([pair[0]], [pair[1]], chessMapperOn=False, clear=True)
+                else:
+                    print("OFF")
+                    ledMatrix.setPixelsOn([pair[0]], [pair[1]], chessMapperOn=False, clear=False)
+        time.sleep(seconds)
