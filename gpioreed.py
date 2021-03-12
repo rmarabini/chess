@@ -6,7 +6,7 @@ from digitalio import Direction, Pull
 from adafruit_mcp230xx.mcp23017 import MCP23017
 import time
 
-from constants import xMapper, yMapper, yMapperT
+from constants import xMapper, xMapperT, yMapper, yMapperT
 class CPIOreed():
     """access reed switch using GPIO.
     some interesting CLIs
@@ -36,18 +36,18 @@ class CPIOreed():
             self.GPIOB[i].value = False
 
     def checkMatrix(self):
-        print("Pressed =", end='')
+        # print("Pressed =", end='')
         for row in range(self.size):
             self.checkLine(row)
-        print()
+        # print()
 
     def checkLine(self, row):
         self.GPIOB[row].value = False
         for col in range(self.size):
             if self.GPIOA[col].value == False:
-                self.matrix[col][row] = 1
+                self.matrix[row][col] = 1
             else:
-                self.matrix[col][row] = 0
+                self.matrix[row][col] = 0
 
         self.GPIOB[row].value = True
 
@@ -69,41 +69,11 @@ class CPIOreed():
         # self.matrix = np.zeros((self.size, self.size),dtype=int)
 
 
-    def testUsingLeds(self):
-        """ Connect MCP23017 to led (A-> negative, B->positive)
-        Discontinued"""
-        self.reset()
-        oldI = 0
-        oldJ = 0
-        while True:
-          for i in range(self.size):  # col
-            for j in range(self.size):  # row
-                # reset matrix
-                self.GPIOA[oldI].value = True
-                self.GPIOB[oldJ].value = False
-                self.matrix[i:j] = 0
-                # set led on
-                self.GPIOA[i].value = False
-                self.GPIOB[j].value = True
-                self.matrix[i][j] = 1
-                oldI=i
-                oldJ=j
-                self.printM()
-                time.sleep(0.5)
-
-    def testUsingReeds(self):
-        """ Connect MCP23017 to reed switches
-             (A-> negative, B->positive"""
-        self.reset2()
-        while True:
-            self.checkMatrix()
-            self.printM()
-            time.sleep(1)
-
-    def printM(self):
+    def printM(self, counter=0):
         """Print self.matrix as a 2D array"""
         # (0,0 in matrix should be bottom left
         # in board
+        print("counter=", counter)
         for y in range(self.size -1, -1, -1):
             print(" %d [" % yMapperT[y], end="")
             for x in range(self.size):
@@ -133,6 +103,35 @@ class CPIOreed():
             rows = differences[1]
             pairs = []
             for col, row in zip(cols, rows):
-                pairs.append(col, row)
+                pairs.append((row, col, self.matrix[col][row]))
             return True, pairs
+
+
+def testUsingReeds(cpio, seconds=1):
+        """ Connect MCP23017 to reed switches
+             (A-> negative, B->positive"""
+        cpio.reset2()
+        counter = 0
+        while True:
+            cpio.checkMatrix()
+            cpio.printM(counter)
+            counter += 1
+            time.sleep(seconds)
+
+def testUsingReeds2(cpio, seconds=1):
+        """ Connect MCP23017 to reed switches
+             (A-> negative, B->positive"""
+        cpio.reset2()
+        counter = 0
+        while True:
+            change, pairList = cpio.getMatrixChange()
+            if change:
+                print("\npairList", pairList)
+                for pair in pairList:
+                    print(xMapperT[pair[0]], yMapperT[pair[1]])
+                cpio.printM(counter)
+            else:
+                print(".", end='')
+            counter += 1
+            time.sleep(seconds)
 
