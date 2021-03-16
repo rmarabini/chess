@@ -1,6 +1,7 @@
 from matrixled import HT16K33, testMatrix, testMatrix2, testMatrix3
 from gpioreed import CPIOreed, testUsingReeds, testUsingReeds2
-from reedled import testLedReedCloseMatrix, testLedReedCloseSwitch
+from game import testLedReedCloseMatrix, testLedReedCloseSwitch
+from game import Chess
 import sys
 import time
 
@@ -15,6 +16,7 @@ elif arg == "led2":
 elif arg == "led3":
     ledMatrix = HT16K33(size=8)
     testMatrix3(ledMatrix)
+
 elif arg == "reed1":
     cpio = CPIOreed(address=0x21, size=8)
     cpio.reset2()
@@ -27,68 +29,19 @@ elif arg == "both1":
     testLedReedCloseMatrix(seconds=0.1)
 elif arg == "both2":
     testLedReedCloseSwitch(seconds=1)
-    
-
-exit(1)
-"""
->>> cpio.GPIOB[0].direction = Direction.OUTPUT
->>> cpio.GPIOA[0].direction = Direction.INPUT
->>> cpio.GPIOA[0].pull = Pull.UP
->>> cpio.GPIOA[0].value; cpio.GPIOB[0].value
-True
-False
->>> cpio.GPIOA[0].value; cpio.GPIOB[0].value
-True
-False
->>> cpio.GPIOA[0].value = True
->>> cpio.GPIOA[0].value; cpio.GPIOB[0].value
-True
-False
->>> cpio.GPIOA[B].value = True
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-NameError: name 'B' is not defined
->>> cpio.GPIOB[0].value = True
->>> cpio.GPIOA[0].value; cpio.GPIOB[0].value
-True
-True
->>> cpio.GPIOA[0].value; cpio.GPIOB[0].value
-True
-True
->>> cpio.GPIOA[0].value; cpio.GPIOB[0].value
-True
-True
->>> cpio.GPIOB[0].value = False
->>> cpio.GPIOA[0].value; cpio.GPIO
-
-
-
-ledMatrix = HT16K33(size=3)
-#testMatrix(ledMatrix,printOn=True, seconds=0.5)
-#testMatrix2(ledMatrix,printOn=True, seconds=0.5)
-cpio = CPIOreed(address=0x21, size=3)
-cpio.testUsingLeds()
-
-
-from matrixled import HT16K33, testMatrix, testMatrix2, testMatrix3
-ledMatrix = HT16K33(size=8)
-testMatrix3(ledMatrix)
-#testMatrix2(ledMatrix, True, .25)
-
-
-##########
-#>>> from gpioreed import GPIOreed
-#>>> g = GPIOreed(size=1)
-#>>> g.print()
-# 1 [0 ]
-#    a
-#>>> g.getGPIOMatrix()
-#>>> g.print()
-#######
-#>>> from gpioreed import GPIOreed; g = GPIOreed(size=3)
-#>>> g.getGPIOMatrix(); g.print()
-#>>> from matrixled import HT16K33
-#>>> ledMatrix = HT16K33(size=3)
-#>>> g.getGPIOMatrix(ledMatrix); g.print()
-
-"""
+elif arg == 'chess1':  # initializacion
+    counter = 0
+    chess = Chess()
+    chess.play_game(chess.humanPlayer, chess.computerPlayer)
+    #while True:
+    #    try:
+    #        chess.checkforBoardPieces()
+    #    except  Exception as e:
+    #        print("BOARD ERROR: initial position is wrong")
+    #        print(e)
+    #    time.sleep(1)
+    #    counter += 1
+    #    print("counter %d" % counter)
+    # chess.checkforBoardPieces()
+    chess.engine.quit()
+print("END")

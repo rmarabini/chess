@@ -6,7 +6,8 @@ from digitalio import Direction, Pull
 from adafruit_mcp230xx.mcp23017 import MCP23017
 import time
 
-from constants import xMapper, xMapperT, yMapper, yMapperT
+from constants import Mapper, X, Y
+
 class CPIOreed():
     """access reed switch using GPIO.
     some interesting CLIs
@@ -16,7 +17,7 @@ class CPIOreed():
         self.size = size
         i2c = busio.I2C(board.SCL, board.SDA)
         mcp = MCP23017(i2c, address=address)
-        self.matrix = np.zeros((size, size),dtype=int)
+        self.matrix = np.zeros(size * size, dtype=int)
         self.GPIOA=[]
         self.GPIOB=[]
         for i in range(size):
@@ -45,9 +46,9 @@ class CPIOreed():
         self.GPIOB[row].value = False
         for col in range(self.size):
             if self.GPIOA[col].value == False:
-                self.matrix[row][col] = 1
+                self.matrix[row * 8 + col] = 1
             else:
-                self.matrix[row][col] = 0
+                self.matrix[row * 8 + col] = 0
 
         self.GPIOB[row].value = True
 
@@ -69,43 +70,40 @@ class CPIOreed():
         # self.matrix = np.zeros((self.size, self.size),dtype=int)
 
 
-    def printM(self, counter=0):
+    def printM(self, counter):
         """Print self.matrix as a 2D array"""
         # (0,0 in matrix should be bottom left
         # in board
         print("counter=", counter)
         for y in range(self.size -1, -1, -1):
-            print(" %d [" % yMapperT[y], end="")
+            print(" %d [" % Y[y], end="")
             for x in range(self.size):
-                print("%d " % self.matrix[y][x], end="")
+                print("%d " % self.matrix[x + y * self.size], end="")
             print("]")
         print("   ", end="")
-        for item in list(xMapper.keys())[:self.size]:
+        for item in X[:self.size]:
             print(" %s" % item, end="")
         print("")
 
     def getMatrixChange(self):
-        """returns the tuple, (true/false, array of coordinates)
+        """returns the tuple, (true/false, squaresON, squaresOFF)
         The first element is false if there is no changes and
         true otherwise.
         Follows an array with positions that have change
-        as (x,y) coordinates. If there is no change
+	to p1 and another con los elements that have changed to 0
+        as squares (1-64). If there is no change
         an empty array is returned"""
         oldMatrix = np.copy(self.matrix)
         self.checkMatrix()
         equal_arrays = np.array_equal(oldMatrix, self.matrix)
 
         if equal_arrays:
-            return False, []
+            return False, [], []
         else:
-            differences = np.where(oldMatrix != self.matrix)
-            cols = differences[0]
-            rows = differences[1]
-            pairs = []
-            for col, row in zip(cols, rows):
-                pairs.append((row, col, self.matrix[col][row]))
-            return True, pairs
-
+            squaresPlus = np.where(oldMatrix < self.matrix)[0]
+            squaresMinus = np.where(oldMatrix > self.matrix)[0]
+            # squares = differences[0]
+            return True, squaresPlus, squaresMinus
 
 def testUsingReeds(cpio, seconds=1):
         """ Connect MCP23017 to reed switches
@@ -124,11 +122,14 @@ def testUsingReeds2(cpio, seconds=1):
         cpio.reset2()
         counter = 0
         while True:
-            change, pairList = cpio.getMatrixChange()
+            change, squaresPlus, squaresMinus = cpio.getMatrixChange()
             if change:
-                print("\npairList", pairList)
-                for pair in pairList:
-                    print(xMapperT[pair[0]], yMapperT[pair[1]])
+                if len(squaresPlus) > 0: print("\nelements ON")
+                for pair in squaresPlus:
+                    print(Mapper[pair])
+                if len(squaresMinus)>0: print("\nelements OFF")
+                for pair in squaresMinus:
+                    print(Mapper[pair])
                 cpio.printM(counter)
             else:
                 print(".", end='')
