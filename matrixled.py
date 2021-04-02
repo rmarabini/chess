@@ -35,7 +35,15 @@ class HT16K33():
         self.matrix.fill(0)
         if write:
             self.display.write_display()
-    
+            
+    def blink(self, squares, seconds):
+        seconds = int(seconds * 10)
+        for counter in range(seconds):
+            self.setPixelsOn(squares, clear=False)
+            time.sleep(.2)
+            self.setPixelsOff(squares, clear=False)
+            time.sleep(.2)
+        
     def setPixelsOn(self, squares, clear = True):
         """ x and y are arrays. light all the pixels in the array.
         If chessMapper is True then the input uses chess notation"""
@@ -90,6 +98,12 @@ class HT16K33():
 
     def getSize(self):
         return self.size
+        
+    def switchOnAllLeds(self):
+        """ switch on all leds"""
+        matrix = np.ones(64,dtype=int)
+        self.setPixelsMatrixOn(matrix)
+      
 
 def testMatrix(ledMatrix, printOn=True, seconds=1):
     """test function. LEDS light one by one in the order 1 to size*size"""
@@ -122,8 +136,7 @@ def testMatrix2(ledMatrix, printOn=True, seconds=1):
 
 def testMatrix3(ledMatrix, printOn=True):
     """ switch on all led at the same time"""
-    matrix = np.ones(64,dtype=int)
-    ledMatrix.setPixelsMatrixOn(matrix)
+    ledMatrix.switchOnAllLeds()
     if printOn:
         ledMatrix.printM()
 

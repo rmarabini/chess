@@ -38,8 +38,17 @@ class CPIOreed():
 
     def checkMatrix(self):
         # print("Pressed =", end='')
-        for row in range(self.size):
-            self.checkLine(row)
+        result1=np.zeros(self.size * self.size, dtype=int)
+        result2=np.ones(self.size * self.size, dtype=int)
+        
+        while not np.array_equal(result1, result2):
+            for row in range(self.size):
+                self.checkLine(row)
+            result1 = np.copy(self.matrix)
+            for row in range(self.size):
+                self.checkLine(row)
+            result2 = np.copy(self.matrix)
+            time.sleep(0.05)
         # print()
 
     def checkLine(self, row):
@@ -104,6 +113,9 @@ class CPIOreed():
             squaresMinus = np.where(oldMatrix > self.matrix)[0]
             # squares = differences[0]
             return True, squaresPlus, squaresMinus
+
+    def getMatrix(self):
+        return self.matrix     
 
 def testUsingReeds(cpio, seconds=1):
         """ Connect MCP23017 to reed switches
