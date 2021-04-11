@@ -34,13 +34,13 @@ elif arg == 'chessw':  # initializacion
     #epd='r1bqkbnr/ppp1p1pp/2n2p2/3pP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - hmvc 0; fmvn 4;'
     counter = 0
     chess = Chess(level=0.05, firstPlayer='h', epd=epd, depth=2)
-    chess.play_game(chess.humanPlayer, chess.computerPlayer)
+    chess.play_game(chess.humanPlayer, chess.computerPlayer, pause=0.05)
     #chess.engine.quit()
 elif arg == 'chessb':  # initializacion
     counter = 0
     epd='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - hmvc 0; fmvn 1;'
     chess = Chess(level=0.05, firstPlayer='c', epd=epd, depth=2)
-    chess.play_game(chess.computerPlayer, chess.humanPlayer)
+    chess.play_game(chess.computerPlayer, chess.humanPlayer, pause=0.05)
     #chess.engine.quit()
     # epd='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - hmvc 0; fmvn 1;'
 print("END")
