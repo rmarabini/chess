@@ -1,3 +1,5 @@
+import collections
+
 from matrixled import HT16K33
 from gpioreed import CPIOreed
 from constants import ERROR, OK, Mapper
@@ -191,9 +193,7 @@ class Chess():
     def who(self, player):
         return "White" if player == chess.WHITE else "Black"
 
-
-    
-    def play_game(self, player1, player2, visual="svg", pause=0.1):
+    def play_game(self, player1, player2, visual="svg", pause=0.01):
         """
 peek() -> last move
 is_castling -> Checks if the given pseudo-legal move is a castling move.
@@ -222,6 +222,9 @@ is_castling -> Checks if the given pseudo-legal move is a castling move.
                 time.sleep(pause)
         except KeyboardInterrupt:
             msg = "Game interrupted!"
+            # print game if ctrl-C is pressed
+            game = chess.pgn.Game.from_board(self.board)
+            print("game", game)
             return
         result = None
         if self.board.is_checkmate():
@@ -236,6 +239,8 @@ is_castling -> Checks if the given pseudo-legal move is a castling move.
         elif self.board.can_claim_draw():
             msg = "draw: claim"
         print(msg)
+        game = chess.pgn.Game.from_board(self.board)
+        print("game", game)
         try:
             self.engine.quit()
         except:
