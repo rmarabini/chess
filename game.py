@@ -178,13 +178,13 @@ class Chess():
     def computerPlayer(self):
         result = self.engine.play(self.board,
                                   chess.engine.Limit(time=self.time, depth=self.depth))
-        #TODO: orgin, target led ON till next movement
         self.ledMatrix.clear(write=True)
         source = result.move.from_square
         target = result.move.to_square
         self.ledMatrix.setPixelsOn([source, target])
         # check result
         try:
+            # TODO: no uci needed just self.board.push(result.move)
             self.board.push_uci(result.move.uci())
         except ValueError:
             print(ValueError)
@@ -201,7 +201,7 @@ is_castling -> Checks if the given pseudo-legal move is a castling move.
         counter=0
         try:
             while not self.board.is_game_over(claim_draw=True):
-                # loop puntil reed switch and board 
+                # loop until reed switch and board
                 # are in agreement
                 self.loopUntillPiecesAreInTheRightPlace(counter=counter)
                 self.ledMatrix.clear(write=True)
