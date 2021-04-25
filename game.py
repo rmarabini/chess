@@ -5,6 +5,7 @@ from gpioreed import CPIOreed
 from constants import ERROR, OK, Mapper
 import chess
 import chess.engine
+import chess.pgn
 import time
 import numpy as np
 
