@@ -1,5 +1,3 @@
-import collections
-
 from matrixled import HT16K33
 from gpioreed import CPIOreed
 from constants import ERROR, OK, Mapper
@@ -8,7 +6,7 @@ import chess.engine
 import chess.pgn
 import time
 import numpy as np
-
+from datetime import datetime
 class BoardError(Exception):
     pass
 
@@ -192,7 +190,18 @@ class Chess():
         return result.move.uci()
 
     def who(self, player):
-        return "White" if player == chess.WHITE else "Black"
+                return "White" if player == chess.WHITE else "Black"
+
+    def png(self, board):
+        game = chess.pgn.Game.from_board(board)
+        game.headers['Date'] = datetime.today().strftime('%Y-%m-%d')
+        if self.computerColor == chess.BLACK:
+            game.headers['White'] = 'human'
+            game.headers['Black'] = 'computer'
+        else:
+            game.headers['Black'] = 'human'
+            game.headers['White'] = 'computer'
+        print("game", game)
 
     def play_game(self, player1, player2, visual="svg", pause=0.01):
         """
@@ -224,8 +233,7 @@ is_castling -> Checks if the given pseudo-legal move is a castling move.
         except KeyboardInterrupt:
             msg = "Game interrupted!"
             # print game if ctrl-C is pressed
-            game = chess.pgn.Game.from_board(self.board)
-            print("game", game)
+            self.png(self.board)
             return
         result = None
         if self.board.is_checkmate():
@@ -240,8 +248,8 @@ is_castling -> Checks if the given pseudo-legal move is a castling move.
         elif self.board.can_claim_draw():
             msg = "draw: claim"
         print(msg)
-        game = chess.pgn.Game.from_board(self.board)
-        print("game", game)
+        self.png(self.board)
+
         try:
             self.engine.quit()
         except:
