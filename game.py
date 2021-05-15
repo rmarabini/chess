@@ -201,7 +201,7 @@ class Chess():
         else:
             game.headers['Black'] = 'human'
             game.headers['White'] = 'computer'
-        print("game", game)
+        print("game:\n", game, "\n")
 
     def play_game(self, player1, player2, visual="svg", pause=0.01):
         """

@@ -31,7 +31,7 @@ elif arg == "both2":
     testLedReedCloseSwitch(seconds=1)
 elif arg == 'chessw':  # initializacion
     epd='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - hmvc 0; fmvn 1;'
-    #epd='r1bqkbnr/ppp1p1pp/2n2p2/3pP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - hmvc 0; fmvn 4;'
+    #epd='3rr3/5kpp/2p2p2/p1Bp4/3Pb1P1/P1P1R2P/2P2P2/2R3K1 w - - hmvc 3; fmvn 27;'
     counter = 0
     chess = Chess(level=0.05, firstPlayer='h', epd=epd, depth=2)
     chess.play_game(chess.humanPlayer, chess.computerPlayer, pause=0.05)
@@ -39,7 +39,7 @@ elif arg == 'chessw':  # initializacion
 elif arg == 'chessb':  # initializacion
     counter = 0
     epd='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - hmvc 0; fmvn 1;'
-    chess = Chess(level=0.05, firstPlayer='c', epd=epd, depth=2)
+    chess = Chess(level=0.05, firstPlayer='c', epd=epd, depth=3)
     chess.play_game(chess.computerPlayer, chess.humanPlayer, pause=0.05)
     #chess.engine.quit()
     # epd='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - hmvc 0; fmvn 1;'
