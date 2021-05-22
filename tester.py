@@ -30,17 +30,25 @@ elif arg == "both1":
 elif arg == "both2":
     testLedReedCloseSwitch(seconds=1)
 elif arg == 'chessw':  # initializacion
-    epd='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - hmvc 0; fmvn 1;'
-    #epd='3rr3/5kpp/2p2p2/p1Bp4/3Pb1P1/P1P1R2P/2P2P2/2R3K1 w - - hmvc 3; fmvn 27;'
-    counter = 0
-    chess = Chess(level=0.05, firstPlayer='h', epd=epd, depth=2)
+    #fen='rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2'
+    fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+    counter = -1 # number of have moves
+    chess = Chess(level=0.05, firstPlayer='h', fen=fen, depth=2, keyboard=counter)
     chess.play_game(chess.humanPlayer, chess.computerPlayer, pause=0.05)
     #chess.engine.quit()
 elif arg == 'chessb':  # initializacion
-    counter = 0
+    counter = -1
     epd='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - hmvc 0; fmvn 1;'
     chess = Chess(level=0.05, firstPlayer='c', epd=epd, depth=3)
     chess.play_game(chess.computerPlayer, chess.humanPlayer, pause=0.05)
     #chess.engine.quit()
     # epd='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - hmvc 0; fmvn 1;'
+elif arg == 'chesswt':  # initializacion
+    #fen='rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2'
+    fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+    counter = -1 # number of half moves
+    chess = Chess(level=0.05, firstPlayer='h', fen=fen, depth=2, keyboard=counter,
+    training = True)
+    chess.play_game(chess.humanPlayer, chess.computerPlayer, pause=0.05)
+    #chess.engine.quit()
 print("END")

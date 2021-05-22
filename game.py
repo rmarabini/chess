@@ -14,14 +14,21 @@ class Chess():
     """ Main class for chess game. pip3 install chess required"""
     def __init__(self, size=8, address=0x21, level=0.1, # second for stockfish
                  firstPlayer='h', stockfishBin="/usr/games/stockfish", depth =2,
-                 epd='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - hmvc 0; fmvn 1;'):
+                 fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+                 keyboard = -1,  # introduce move through keyboard
+                                 # after "keyboard" moves the game starts
+                 training=False # moves introduced using the board,
+                                  # game starts if move a1a1 is introduced
+                 ):
+        self.training = training
         self.cpio = CPIOreed(address=address, size=size)
         self.ledMatrix = HT16K33(size=size)
         self.engine = chess.engine.SimpleEngine.popen_uci(stockfishBin)
-        #self.board = chess.Board()
-        self.board, _dummy = chess.Board.from_epd(epd)
+        self.board = chess.Board()
+        self.board.set_fen(fen)
         self.time = level
         self.depth = depth
+        self.keyboard = keyboard # number of have moves
 
         if firstPlayer == 'h': # h = human, c = computer, b= both computer
             self.player1 = self.humanPlayer
@@ -69,8 +76,7 @@ class Chess():
             print(self.board.unicode(invert_color=True))
             print("BOARDERROR: square %s, %s is wrong" % 
                                           (Mapper[square]), counter)
-            print(self.board.epd(hmvc=self.board.halfmove_clock, 
-                                 fmvn=self.board.fullmove_number))
+            print(self.board.fen())
             if counter==0:
                 self.switchLedWithPieces()
                 time.sleep(.25)
@@ -97,17 +103,16 @@ class Chess():
             uci = None
         return uci
 
-    def getMoveFromBoard(self, prompt):
+    def getMoveFromBoard(self, prompt, myColor):
         print(prompt)
         first = True
-	# piece_map = self.board.piece_map()  # dict square: piece
         uci=""
         while True:
             skip = False
             result, squaresPlus, squaresMinus = self.cpio.getMatrixChange()
             if result:
                 for square in squaresMinus:
-                    if self.board.color_at(square) == self.computerColor:
+                    if self.board.color_at(square) != myColor:
                          skip = True
                          break
                 if skip: 
@@ -123,17 +128,49 @@ class Chess():
                     self.ledMatrix.setPixelsOn([square])
                     if first == False:
                          print("return uci", uci)
-                         time.sleep(1)  # wait so we can see the led of the final pposition
+                         time.sleep(.25)  # wait so we can see the led of the final pposition
                          return uci
                 first = False
             time.sleep(.01)
-        # print("return uci", uci)
-        # return uci    
+
+    def moveLoop(self, mycolor):
+        uci = self.getMoveFromBoard("%s's move> " %
+                                    self.who(self.board.turn),
+                                    mycolor)
+        legal_uci_moves = [move.uci() for move in self.board.legal_moves]
+        counter = 0
+        while uci not in legal_uci_moves:
+            # so far always promote to queen
+            promotion = uci + "q"
+            if promotion in legal_uci_moves:
+                uci += "q"
+                break
+            if self.training and uci[:2] == uci[-2:]:
+                self.training = False
+                if self.computerColor == mycolor:
+                    return False
+            print(self.cpio.printM(counter))
+            print(self.board.unicode(invert_color=True))
+            print("sent move = ", uci, "training = ", self.training)
+            print("Legal moves: " + (",".join(sorted(legal_uci_moves))))
+            print("reset board")
+            time.sleep(0.1)
+            # input("reset board and press enter to continue\n")
+            self.cpio.getMatrixChange()  # update matrix
+
+            uci = self.getMoveFromBoard("%s's move[q to quit]> " % self.who(
+                self.board.turn), self.humanColor)
+            counter += 1
+            # check if castling
+        try:
+            self.board.push_uci(uci)
+        except ValueError:
+            print(ValueError)
+        return uci         	    
 
 	
-    #def humanPlayer(self, keyboard = True):
     def humanPlayer(self, keyboard = False):
-        if keyboard:
+        if keyboard or len(self.board.move_stack) < self.keyboard:
             # TODO: origin led on 0.1 seg, target on till next move
             uci = self.getMove("%s's move [q to quit]> " %
                                self.who(self.board.turn))
@@ -142,39 +179,29 @@ class Chess():
                 print("Legal moves: " + (",".join(sorted(legal_uci_moves))))
                 uci = self.getMove("%s's move[q to quit]> " % self.who(
                     self.board.turn))
+            self.board.push_uci(uci)
             return uci
         else:
-            uci = self.getMoveFromBoard("%s's move> " %
-                                        self.who(self.board.turn))
-            legal_uci_moves = [move.uci() for move in self.board.legal_moves]
-            counter = 0
-            while uci not in legal_uci_moves:
-                # so far always promote to queen
-                promotion = uci + "q"
-                if promotion in legal_uci_moves:
-                    uci +="q"
-                    break
-                print(self.cpio.printM(counter))
-                print(self.board.unicode(invert_color=True))
-                print("sent move = ", uci)
-                print("Legal moves: " + (",".join(sorted(legal_uci_moves))))
-                print("reset board")
-                time.sleep(0.1)
-                #input("reset board and press enter to continue\n")
-                self.cpio.getMatrixChange() # update matrix
-		
-                uci = self.getMoveFromBoard("%s's move[q to quit]> " % self.who(
-                    self.board.turn))
-                counter += 1
-                # check if castling
-            try:
-                self.board.push_uci(uci)
-            except ValueError:
-                print(ValueError)
-            return uci
-         	    
+            return self.moveLoop(self.humanColor)
 
-    def computerPlayer(self):
+    def computerPlayer(self, keyboard=False):
+        if keyboard or len(self.board.move_stack) < self.keyboard:
+            # TODO: origin led on 0.1 seg, target on till next move
+            uci = self.getMove("%s's move [q to quit]> " %
+                               self.who(self.board.turn))
+            legal_uci_moves = [move.uci() for move in self.board.legal_moves]
+            while uci not in legal_uci_moves:
+                print("Legal moves: " + (",".join(sorted(legal_uci_moves))))
+                uci = self.getMove("%s's move[q to quit]> " % self.who(
+                    self.board.turn))
+            self.board.push_uci(uci)
+            return uci
+
+        if self.training:
+            uci = self.moveLoop(self.computerColor)
+            if uci:
+                return uci
+        
         result = self.engine.play(self.board,
                                   chess.engine.Limit(time=self.time, depth=self.depth))
         self.ledMatrix.clear(write=True)
