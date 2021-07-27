@@ -9,7 +9,7 @@ import numpy as np
 from datetime import datetime
 class BoardError(Exception):
     pass
-import os, time
+import kkdelavaca
 
 class Chess():
     """ Main class for chess game. pip3 install chess required"""
