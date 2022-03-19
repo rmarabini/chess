@@ -286,10 +286,24 @@ is_castling -> Checks if the given pseudo-legal move is a castling move.
         """switch on led where there is a close reed switch"""
         self.cpio.reset2()
         self.cpio.checkMatrix()
-        self.ledMatrix.setPixelsMatrixOn(self.cpio.matrix)
+        self.ledMatrix.setPixelsMatrixOn(fliplr(self.cpio.matrix))
 
 
 ##########################
+def swap(a, b):
+    tmp = a
+    a = b
+    b = tmp
+    return a, b
+
+def fliplr(m):
+    for j in range (0,8):
+        for i, I in zip(range(0,4), range(7,3, -1)):
+             m[i+j*8], m[I+j*8] = swap(m[i+j*8], m[I+j*8]);
+
+
+    return m
+
 def testLedReedCloseMatrix(seconds=0.1):
     """switch on led where there is a close reed switch"""
     ledMatrix = HT16K33(size=8)
@@ -297,7 +311,8 @@ def testLedReedCloseMatrix(seconds=0.1):
     cpio.reset2()
     while True:
         cpio.checkMatrix()
-        ledMatrix.setPixelsMatrixOn(cpio.matrix)
+        #print(cpio.matrix, type(cpio.matrix))
+        ledMatrix.setPixelsMatrixOn(fliplr(cpio.matrix))
         time.sleep(seconds)
 
 def testLedReedCloseSwitch(seconds=1):
