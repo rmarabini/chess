@@ -25,12 +25,12 @@ elif arg == "reed2": # detect modification of board
     cpio = CPIOreed(address=0x21, size=8)
     cpio.reset2()
     testUsingReeds2(cpio,seconds=0.5)
-elif arg == "both1":
+elif arg == "both1": # switch on/off led when a piece is placed/remooved
     testLedReedCloseMatrix(seconds=0.1)
 elif arg == "both2":
     testLedReedCloseSwitch(seconds=1)
 elif arg == 'chessw':  # initializacion
-    #fen='rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2'
+    #fen='r7/p2k4/3P3p/2n5/R4P2/1P5P/P5P1/6K1 w - - 2 33'
     fen='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
     counter = -1 # number of have moves
     chess = Chess(level=0.05, firstPlayer='h', fen=fen, depth=2, keyboard=counter)
