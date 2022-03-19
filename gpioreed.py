@@ -49,15 +49,15 @@ class CPIOreed():
                 self.checkLine(row)
             result2 = np.copy(self.matrix)
             time.sleep(0.05)
-        # print()
+        # print(result1, result2)
 
     def checkLine(self, row):
         self.GPIOB[row].value = False
         for col in range(self.size):
             if self.GPIOA[col].value == False:
-                self.matrix[row * 8 + col] = 1
+                self.matrix[row * 8 +  7 - col] = 1
             else:
-                self.matrix[row * 8 + col] = 0
+                self.matrix[row * 8 +  7 - col] = 0
 
         self.GPIOB[row].value = True
 
