@@ -53,7 +53,7 @@ class HT16K33():
 
         for square in squares:
             self.display.set_pixel(square // self.size, 
-	                           square % self.size, 1)
+	                           7 - (square % self.size), 1)
             self.matrix[square]=1
             self.display.write_display()
 
@@ -78,7 +78,7 @@ class HT16K33():
 
         for square in squares:
             self.display.set_pixel(square // self.size, 
-	                           square % self.size, 0)
+	                           7-(square % self.size), 0)
             self.matrix[square]=0
             self.display.write_display()
 
